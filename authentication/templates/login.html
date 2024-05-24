@@ -1,0 +1,36 @@
+{% extends "bases/authentication.html" %}
+
+{% block title %}Login{% endblock title %}
+
+{% block heading %}Login{% endblock heading %}
+
+{% block icon %}
+  <i class="bx bxs-key text-gray-800 text-2xl"></i>
+{% endblock icon %}
+
+{% block form %}
+  <div class="mb-4" x-data="{ inputValue: '' }">
+    <label for="username" class="block text-gray-700 font-medium">Username atau Email</label>
+    <input required type="text" id="username" name="username" placeholder="Username atau Email" x-model="inputValue" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+    <input required type="hidden" id="email" name="email" x-bind:value="inputValue"/>
+  </div>
+
+  <div class="mb-6">
+    <label for="password" class="block text-gray-700 font-medium">Kata Sandi</label>
+    <div class="flex justify-between items-center" x-data="{ reveal: false }">
+      <input required x-bind:type="reveal ? 'text' : 'password'" id="password" name="password" placeholder="Kata Sandi" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+      <i x-bind:class="{ 'bx': true, 'bx-show': !reveal, 'bx-low-vision': reveal, 'mx-2': true, 'text-lg': true, 'hover:cursor-pointer': true, 'text-gray-800': true }" x-on:click="reveal = !reveal"></i>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between">
+      <button type="submit" class="bg-blue-500 border border-solid border-blue-500 text-white px-4 py-2 rounded-md hover:bg-white hover:text-blue-500">Login</button>
+      <div class="mx-2"></div>
+      <a href="{% url 'authentication:register' %}">
+        <button type="button" class="bg-amber-500 border border-solid border-amber-500 text-white px-4 py-2 rounded-md hover:bg-white hover:text-amber-500">Daftar</button>
+      </a>
+    </div>
+    <a href="{% url 'authentication:reset_password' %}" class="text-blue-500 hover:underline">Lupa kata sandi?</a>
+  </div>
+{% endblock form %}

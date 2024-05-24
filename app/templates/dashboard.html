@@ -1,0 +1,101 @@
+{% extends "bases/app.html" %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block body %}
+  <div class="bg-gray-800 p-4 flex justify-center items-center text-white font-bold mb-10">
+    Dashboard
+  </div>
+
+  <div class="flex justify-evenly mt-2 w-full">
+    <div class="w-[50%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+      <div class="p-2 rounded shadow">
+        <div class="flex items-center justify-evenly">
+          <i class="bx bxs-data text-pink-800 text-4xl opacity-60"></i>
+          <div class="ml-2">
+            <h2 class="text-gray-700 text-lg font-semibold mb-2">File di Server</h2>
+            <p class="text-gray-500 text-2xl font-bold">10</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 rounded shadow">
+        <div class="flex items-center justify-evenly">
+          <i class="bx bx-lock text-orange-800 text-4xl opacity-60"></i>
+          <div class="ml-2">
+            <h2 class="text-gray-700 text-lg font-semibold mb-2">File Terenkripsi</h2>
+            <p class="text-gray-500 text-2xl font-bold">5</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 rounded shadow">
+        <div class="flex items-center justify-evenly">
+          <i class="bx bx-lock-open text-orange-800 text-4xl opacity-60"></i>
+          <div class="ml-2">
+            <h2 class="text-gray-700 text-lg font-semibold mb-2">File Terdekripsi</h2>
+            <p class="text-gray-500 text-2xl font-bold">5</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 rounded shadow">
+        <div class="flex items-center justify-evenly">
+          <i class="bx bxs-folder-open text-yellow-800 text-4xl opacity-60"></i>
+          <div class="ml-2">
+            <h2 class="text-gray-700 text-lg font-semibold mb-2">File Total</h2>
+            <p class="text-gray-500 text-2xl font-bold">15</p>
+          </div>
+        </div>
+      </div>
+      <div class="p-2 rounded shadow">
+        <div class="flex items-center justify-evenly">
+          <i class="bx bxs-user text-green-800 text-4xl opacity-60"></i>
+          <div class="ml-2">
+            <h2 class="text-gray-700 text-lg font-semibold mb-2">Akun Pengguna</h2>
+            <p class="text-gray-500 text-2xl font-bold">15</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="w-60 p-2 rounded shadow">
+      <h2 class="text-gray-700 text-lg font-semibold mb-2">Aktivitas Terbaru</h2>
+      <div class="p-4 bg-gray-100 rounded">
+        <div class="flex items-center mb-2">
+          <i class="bx bx-lock-open text-orange-500 text-xl mr-2"></i>
+          <div>
+            <p class="text-gray-700 text-sm">File didekripsi</p>
+            <p class="text-gray-500 text-xs">2 jam yang lalu</p>
+          </div>
+        </div>
+        <div class="flex items-center mb-2">
+          <i class="bx bx-lock-open text-orange-500 text-xl mr-2"></i>
+          <div>
+            <p class="text-gray-700 text-sm">File dienkripsi</p>
+            <p class="text-gray-500 text-xs">3 jam yang lalu</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <i class="bx bxs-user text-blue-500 text-xl mr-2"></i>
+          <div>
+            <p class="text-gray-700 text-sm">Akun diupdate</p>
+            <p class="text-gray-500 text-xs">4 jam yang lalu</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <i class="bx bxs-user text-blue-500 text-xl mr-2"></i>
+          <div>
+            <p class="text-gray-700 text-sm">Akun diupdate</p>
+            <p class="text-gray-500 text-xs">4 jam yang lalu</p>
+          </div>
+        </div>
+        <div class="flex items-center">
+          <i class="bx bxs-user text-blue-500 text-xl mr-2"></i>
+          <div>
+            <p class="text-gray-700 text-sm">Akun diupdate</p>
+            <p class="text-gray-500 text-xs">4 jam yang lalu</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock body %}

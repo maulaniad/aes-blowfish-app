@@ -1,0 +1,54 @@
+{% extends "bases/authentication.html" %}
+
+{% block title %}Daftar{% endblock title %}
+
+{% block heading %}Daftar Akun{% endblock heading %}
+
+{% block icon %}
+  <i class="bx bxs-user text-gray-800 text-2xl"></i>
+{% endblock icon %}
+
+{% block form %}
+  <div class="mb-4">
+    <label for="fullname" class="block text-gray-700 font-medium">Nama Lengkap</label>
+    <input required type="text" id="fullname" name="fullname" placeholder="Nama Lengkap" maxlength="150" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+  </div>
+
+  <div class="mb-4">
+    <label for="username" class="block text-gray-700 font-medium">Username</label>
+    <input required type="text" id="username" name="username" placeholder="Username" maxlength="16" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+  </div>
+
+  <div class="mb-4">
+    <label for="email" class="block text-gray-700 font-medium">Email</label>
+    <input required type="email" id="email" name="email" placeholder="Email" maxlength="50" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+  </div>
+
+  <div x-data="{ reveal: false, match: null, password: null, confirmPassword: null }">
+    <div class="mb-6">
+      <label for="password" class="block text-gray-700 font-medium">Kata Sandi</label>
+      <div class="flex justify-between items-center">
+        <input required x-bind:type="reveal ? 'text' : 'password'" x-model="password" x-on:input="match = password === confirmPassword && password !== ''" id="password" name="password" placeholder="Kata Sandi" maxlength="16" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label for="confirmPassword" class="block text-gray-700 font-medium">Konfirmasi Kata Sandi</label>
+      <input required x-bind:type="reveal ? 'text' : 'password'" x-model="confirmPassword" x-on:input="match = password === confirmPassword && password !== ''" id="confirmPassword" name="confirmPassword" placeholder="Ulangi Kata Sandi" maxlength="16" class="w-full border rounded-md px-4 py-2 mt-1 bg-gray-100 focus:outline-none focus:border-blue-500"/>
+    </div>
+
+    <div class="flex justify-end items-center hover:cursor-pointer" x-on:click="reveal = !reveal">
+      <p x-text="reveal ? 'Sembunyikan Kata Sandi' : 'Perlihatkan Kata Sandi'" class="select-none text-gray-800"></p>
+      <i x-bind:class="{ 'bx': true, 'bx-show': !reveal, 'bx-low-vision': reveal, 'mx-2': true, 'text-lg': true, 'text-gray-800': true }"></i>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <button x-bind:type="match ? 'submit' : 'button'" class="bg-blue-500 border border-blue-500 text-white px-4 py-2 rounded-md hover:bg-white hover:text-blue-400 focus:outline-none">Submit</button>
+      <p x-bind:class="{ 'text-sm': true, 'text-emerald-600': match, 'text-red-600': !match }" x-show="match != null" x-text="match ? 'Kata sandi cocok' : 'Kata Sandi tidak cocok!'"></p>
+    </div>
+  </div>
+
+  <div class="mt-5">
+    <a href="{% url "authentication:login" %}" class="text-blue-500 hover:underline">Sudah punya akun?</a>
+  </div>
+{% endblock form %}

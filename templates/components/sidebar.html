@@ -1,0 +1,57 @@
+{% load static %}
+
+<div class="bg-gray-800 text-white w-64 flex flex-col">
+
+  <div class="p-4 border-b border-gray-700">
+    <img src="{% static 'favicon.ico' %}" alt="App Logo" class="w-20 m-auto"/>
+    <div class="my-3"></div>
+    <h1 class="text-xl text-center font-semibold">AES Blowfish App</h1>
+  </div>
+
+  <nav class="flex-1 overflow-y-auto">
+    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+      <div class="w-20 flex justify-between items-center">
+        <i class="bx bxs-dashboard text-lg"></i>
+        <p class="mx-2">Dashboard</p>
+      </div>
+    </a>
+    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+      <div class="w-20 flex justify-between items-center">
+        <i class="bx bxs-lock text-lg"></i>
+        <p class="mx-2">Enkripsi</p>
+      </div>
+    </a>
+    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+      <div class="w-20 flex justify-between items-center">
+        <i class="bx bx-lock-open-alt text-lg"></i>
+        <p class="mx-2">Dekripsi</p>
+      </div>
+    </a>
+    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+      <div class="w-20 flex justify-between items-center">
+        <i class="bx bxs-cog text-lg"></i>
+        <p class="mx-2">Pengaturan</p>
+      </div>
+    </a>
+    <a href="{% url 'authentication:logout' %}" class="block py-2 px-4 text-gray-400 hover:text-white">
+      <div class="w-20 flex justify-between items-center">
+        <i class="bx bxs-log-out-circle text-lg"></i>
+        <p class="mx-2">Logout</p>
+      </div>
+    </a>
+  </nav>
+
+  <div class="flex-1"></div>
+
+  <div class="block py-2 px-4 text-gray-400 bg-gray-900">
+    <div class="w-20 flex items-center">
+      <i class="bx bx-user-circle text-4xl"></i>
+      <div class="mx-2"></div>
+      <div>
+        <p class="mx-2 font-bold">Mameng</p>
+        <p class="mx-2">Admin</p>
+      </div>
+    </div>
+  </div>
+
+</div>

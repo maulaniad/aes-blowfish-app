@@ -1,0 +1,10 @@
+asgiref==3.8.1
+bcrypt==4.1.2
+Django==5.0.3
+django-appconf==1.0.6
+django-compressor==4.4
+mysqlclient==2.2.4
+python-decouple==3.8
+rcssmin==1.1.1
+rjsmin==1.2.1
+sqlparse==0.4.4
