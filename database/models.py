@@ -30,7 +30,7 @@ class BaseModel(Model):
 
 class Role(BaseModel):
     oid      = UUIDField(db_column="oid", unique=True, default=uuid4)
-    rolename = CharField(db_column="rolename", max_length=20)
+    rolename = CharField(db_column="rolename", max_length=20, db_index=True)
 
     def __str__(self) -> str:
         return self.rolename
@@ -41,9 +41,9 @@ class Role(BaseModel):
 
 class User(BaseModel):
     oid              = UUIDField(db_column="oid", unique=True, default=uuid4)
-    fullname         = CharField(db_column="fullname", max_length=150)
-    username         = CharField(db_column="username", max_length=50)
-    email            = CharField(db_column="email", max_length=50)
+    fullname         = CharField(db_column="fullname", max_length=150, db_index=True)
+    username         = CharField(db_column="username", max_length=50, db_index=True)
+    email            = CharField(db_column="email", max_length=50, db_index=True)
     secret_key       = CharField(db_column="secret_key", max_length=255, blank=True)
     password         = CharField(db_column="password", max_length=255)
     password_changed = DateTimeField(db_column="password_changed", null=True, default=None)
@@ -67,8 +67,8 @@ class User(BaseModel):
 
 class File(BaseModel):
     oid       = UUIDField(db_column="oid", unique=True, default=uuid4)
-    file      = FileField(db_column="file", upload_to="uploads/")
-    filename  = CharField(db_column="filename", max_length=255)
+    file      = FileField(db_column="file")
+    filename  = CharField(db_column="filename", max_length=255, db_index=True)
     extension = CharField(db_column="extension", max_length=10)
     size      = IntegerField(db_column="size")
 
@@ -76,9 +76,12 @@ class File(BaseModel):
         return self.filename
 
     def save(self, *args, **kwargs) -> None:
-        self.filename = self.file.name
-        self.extension = self.filename.split(".")[-1]
-        self.size = self.file.size
+        if not self.filename:
+            self.filename = self.file.name
+        if not self.extension:
+            self.extension = self.filename.split(".")[-1]
+        if not self.size:
+            self.size = self.file.size
         super().save(*args, **kwargs)
 
     class Meta(BaseModel.Meta):
@@ -87,7 +90,7 @@ class File(BaseModel):
 
 class Transaction(BaseModel):
     oid    = UUIDField(db_column="oid", unique=True, default=uuid4)
-    key    = CharField(db_column="key", max_length=255)
+    key    = CharField(db_column="key", max_length=255, db_index=True)
     vector = CharField(db_column="vector", max_length=255)
     name   = CharField(db_column="name", max_length=255)
     status = CharField(db_column="status", max_length=10, choices=[(status.name, status.value) for status in TransactionStatus])
@@ -103,7 +106,7 @@ class Transaction(BaseModel):
 
 class RecentActivity(BaseModel):
     oid    = UUIDField(db_column="oid", unique=True, default=uuid4)
-    action = CharField(db_column="action", max_length=255)
+    action = CharField(db_column="action", max_length=255, db_index=True)
     issued = DateTimeField(db_column="issued", auto_now_add=True)
     user   = ForeignKey(to=User, db_column="user_id", on_delete=CASCADE)
 
