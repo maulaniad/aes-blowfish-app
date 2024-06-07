@@ -46,7 +46,9 @@ INSTALLED_APPS = [
     # Project Apps
     'app',
     'authentication',
+    'core',
     'database',
+    'download',
 ]
 
 MIDDLEWARE = [
@@ -79,6 +81,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                # Custom context_processors for passing an active urls throughout the app
+                'core.context_processors.context_paser',
             ],
         },
     },
@@ -145,6 +150,7 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = 'static/'
 
+MEDIA_ROOT = 'uploads/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

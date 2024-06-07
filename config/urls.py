@@ -39,4 +39,6 @@ urlpatterns = [
             namespace="authentication"
         )
     ),
+
+    path("download/", include(("download.urls", "download"), namespace="download")),
 ]
