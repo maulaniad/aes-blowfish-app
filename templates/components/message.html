@@ -1,9 +1,6 @@
 {% if messages %}
   {% for message in messages %}
-    <div
-      class="absolute top-[90%] left-[42%] min-w-80 bg-gray-200 rounded-md"
-      x-data="{ timeout: setTimeout(() => $el.remove(), 5000) }"
-    >
+    <div class="absolute top-[90%] left-[42%] min-w-80 bg-gray-200 rounded-md" x-data="{ timeout: setTimeout(() => $el.remove(), 5000) }">
       <div class="bg-white border border-gray-300 shadow-md rounded-md p-4 max-w-md">
         <div class="flex items-center justify-center">
           {% if 'error' in message.tags %}
