@@ -9,13 +9,13 @@
   </div>
 
   <nav class="flex-1 overflow-y-auto">
-    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+    <a href="{% url 'app:dashboard' %}" class="{% if current_url == 'dashboard' %} text-white {% else %} text-gray-400 {% endif %} block py-2 px-4 hover:text-white">
       <div class="w-20 flex justify-between items-center">
         <i class="bx bxs-dashboard text-lg"></i>
         <p class="mx-2">Dashboard</p>
       </div>
     </a>
-    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+    <a href="{% url 'app:encryption' %}" class="{% if current_url == 'encryption' %} text-white {% else %} text-gray-400 {% endif %} block py-2 px-4 hover:text-white">
       <div class="w-20 flex justify-between items-center">
         <i class="bx bxs-lock text-lg"></i>
         <p class="mx-2">Enkripsi</p>
@@ -44,12 +44,16 @@
   <div class="flex-1"></div>
 
   <div class="block py-2 px-4 text-gray-400 bg-gray-900">
-    <div class="w-20 flex items-center">
-      <i class="bx bx-user-circle text-4xl"></i>
+    <div class="w-32 flex items-center">
+      {% if request.session.role|lower == 'admin' %}
+        <i class='bx bx-crown text-4xl'></i>
+      {% else %}
+        <i class="bx bx-user-circle text-4xl"></i>
+      {% endif %}
       <div class="mx-2"></div>
       <div>
-        <p class="mx-2 font-bold">Mameng</p>
-        <p class="mx-2">Admin</p>
+        <p class="mx-2 font-bold">{{ request.session.user|title }}</p>
+        <p class="mx-2">{{ request.session.role|title }}</p>
       </div>
     </div>
   </div>
