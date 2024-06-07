@@ -1,8 +1,9 @@
-.vscode/
-venv/
 .env
 .directory
 tailwindcss.sh
 
 __pycache__/
+.vscode/
 CACHE/
+uploads/
+venv/
