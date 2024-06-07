@@ -22,6 +22,8 @@ class LoginView(View):
 
         if form.is_valid():
             request.session['is_authenticated'] = True
+            request.session['user'] = form.cleaned_data['user']
+            request.session['role'] = form.cleaned_data['role']
             messages.success(request, message="Login Berhasil!")
             return redirect(to="app:dashboard")
 
@@ -101,4 +103,5 @@ class ResetPasswordView(View):
 class LogoutView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
         request.session.pop('is_authenticated', None)
+        request.session.pop('user', None)
         return redirect(to="authentication:login")

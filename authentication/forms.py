@@ -26,6 +26,9 @@ class LoginForm(ModelForm):
         if not check_password(password, user_data.password):
             raise ValidationError("Wrong password ...")
 
+        cleaned_data['user'] = user_data.fullname
+        cleaned_data['role'] = user_data.role.rolename
+
         return cleaned_data
 
     class Meta:
