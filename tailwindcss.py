@@ -25,4 +25,14 @@ def start_tailwind():
 
 
 if __name__ == "__main__":
-    start_tailwind()
+    try:
+        print("Starting Tailwind CSS...")
+        print("Only for Development Usage! Do not use it in production!")
+        print("Finalized css will be in: static/src/output.css")
+        print()
+        print("Press [CTRL+C] to Stop")
+        start_tailwind()
+    except KeyboardInterrupt:
+        print()
+        print("Exiting...")
+        print("Bye...")
