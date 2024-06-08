@@ -1,8 +1,8 @@
 from django.urls import path
 
-from download.views import DownloadManagerView
+from download.views import ObjectDownloadView
 
 
 urlpatterns = [
-    path("<str:filename>/", DownloadManagerView.as_view(), name="file"),
+    path("<str:oid>/", ObjectDownloadView.as_view(), name="object"),
 ]
