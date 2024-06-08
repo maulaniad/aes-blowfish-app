@@ -1,13 +1,14 @@
 from datetime import timedelta
 
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
-from authentication.forms import LoginForm, RegisterForm, ResetPasswordForm
+from authentication.forms import RegisterForm, ResetPasswordForm
 from database.models import User
 from helpers.dates import dt_now
 
@@ -18,12 +19,16 @@ class LoginView(View):
         return render(request, template_name="login.html")
 
     def post(self, request: HttpRequest) -> HttpResponse:
-        form = LoginForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user_data = authenticate(request, username=username, password=password)
 
-        if form.is_valid():
+        if user_data:
             request.session['is_authenticated'] = True
-            request.session['user'] = form.cleaned_data['user']
-            request.session['role'] = form.cleaned_data['role']
+            request.session['user'] = user_data.fullname       # type: ignore
+            request.session['role'] = user_data.role.rolename  # type: ignore
+
+            login(request, user_data)
             messages.success(request, message="Login Berhasil!")
             return redirect(to="app:dashboard")
 

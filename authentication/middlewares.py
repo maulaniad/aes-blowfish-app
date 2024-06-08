@@ -19,6 +19,9 @@ class AuthenticationMiddleware:
 
         is_authenticated = request.session.get('is_authenticated', None)
 
+        if request.path.startswith('/admin'):
+            return response
+
         if self.is_safe_route(request.path) and is_authenticated:
             return HttpResponseRedirect(redirect_to=reverse("app:dashboard"))
 
@@ -28,7 +31,7 @@ class AuthenticationMiddleware:
         return response
 
     def is_safe_route(self, path: str) -> bool:
-        if path.startswith('/admin'):
+        if path == "/":
             return True
 
         return path in [reverse(route) for route in SAFE_ROUTES]
