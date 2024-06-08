@@ -42,6 +42,7 @@ class Blowfish:
     modulus = int(2) ** 32
 
     def __init__(self, key):
+        key = list(map(ord, key))
 
         if not key or len(key) < 8 or len(key) > 56:
             raise RuntimeError("Attempted to initialize Blowfish cipher with key of invalid length: %s" % len(key))
@@ -385,6 +386,7 @@ class Blowfish:
         return f
 
     def encrypt(self, data):
+        data = tuple(char for char in data)
 
         if len(data) != 8:
             raise RuntimeError("Attempted to encrypt data of invalid block length: %s" % len(data))
@@ -437,13 +439,10 @@ if __name__ == '__main__':
     while len(chars) < 8:
         chars = input("Enter Secret Key (Min 8 chars): ")
 
-    blowfish_key = list(map(ord, chars))
-    blowfish_engine = Blowfish(blowfish_key)
+    blowfish_engine = Blowfish(chars)
 
     chars = input("Enter String to Encrypt: ")
-
-    data = tuple(char for char in chars)
-    encrypted = blowfish_engine.encrypt(data)
+    encrypted = blowfish_engine.encrypt(chars)
     print(f"Encrypted String: {encrypted}")
 
     encrypted_data = list(map(ord, encrypted))
