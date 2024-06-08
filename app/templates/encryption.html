@@ -13,11 +13,11 @@
       <form method="post" action="{% url 'app:encryption' %}" enctype="multipart/form-data">
         <div class="mb-4">
           <label for="file" class="block text-gray-700 font-medium mb-2">Pilih dan upload file untuk dienkripsi:</label>
-          <input type="file" id="file" name="file" class="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500">
+          <input type="file" id="file" name="file" class="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500"/>
         </div>
         <div class="mb-4">
           <label for="key" class="block text-gray-700 font-medium mb-2">Kunci Enkripsi:</label>
-          <input type="text" id="key" name="key" class="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Masukan kunci enkripsi anda">
+          <input type="text" id="key" name="key" class="w-full border rounded-md px-4 py-2 focus:outline-none focus:border-blue-500" placeholder="Masukan kunci enkripsi anda (min 8 karakter)" minlength="8" maxlength="56"/>
         </div>
         <button x-bind:type="valid ? 'submit' : 'button'" id="encryptionForm" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Encrypt</button>
         {% csrf_token %}
@@ -30,10 +30,12 @@
       <div class="bg-white p-8 min-w-80 text-center rounded shadow-md">
         <p>
           File Berhasil Dienkripsi! <br/>
-          Checksum : {{ checksum }}
+          <strong>Kode :</strong> {{ name }} <br/>
+          <strong>Ukuran :</strong> {{ size }} <br/>
+          <strong>Checksum :</strong> {{ checksum }}
         </p>
-        <button onclick="window.location.href='{% url 'download:file' filename %}'" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:bg-green-700">
-          <i class='bx bxs-file-blank'></i>
+        <button onclick="window.location.href='{% url 'download:object' oid %}'" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-700 focus:outline-none focus:bg-green-700">
+          <i class='bx bxs-file-{{ extension }}'></i>
           Unduh
         </button>
       </div>
