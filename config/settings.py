@@ -64,6 +64,13 @@ MIDDLEWARE = [
     'authentication.middlewares.AuthenticationMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    # Custom Backends
+    'authentication.backends.AuthenticationBackend',
+]
+
+AUTH_USER_MODEL = 'database.User'
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -79,7 +86,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
+                # 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom context_processors for passing an active urls throughout the app

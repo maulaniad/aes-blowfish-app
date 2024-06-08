@@ -21,7 +21,7 @@
         <p class="mx-2">Enkripsi</p>
       </div>
     </a>
-    <a href="#" class="block py-2 px-4 text-gray-400 hover:text-white">
+    <a href="{% url 'app:decryption' %}" class="{% if current_url == 'decryption' %} text-white {% else %} text-gray-400 {% endif %} block py-2 px-4 hover:text-white">
       <div class="w-20 flex justify-between items-center">
         <i class="bx bx-lock-open-alt text-lg"></i>
         <p class="mx-2">Dekripsi</p>

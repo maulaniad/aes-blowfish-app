@@ -1,6 +1,8 @@
+from enum import Enum
 from uuid import uuid4
 
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db.models import (Model,
                               UUIDField,
                               IntegerField,
@@ -39,15 +41,43 @@ class Role(BaseModel):
         db_table = "tb_roles"
 
 
-class User(BaseModel):
+class UserManager(BaseUserManager):
+    def create_user(self, username, email, fullname, password, **extra_fields):
+        if not username:
+            raise ValueError("The given username must be set")
+        if not email:
+            raise ValueError("The given email must be set")
+        if not fullname:
+            raise ValueError("The given fullname must be set")
+        if not password:
+            raise ValueError("The given password must be set")
+
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, fullname=fullname, **extra_fields)
+        user.password = make_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, fullname, password, **extra_fields):
+        role = Role.objects.get(rolename__icontains="admin")
+        extra_fields.setdefault('role', role)
+        return self.create_user(username, email, fullname, password, **extra_fields)
+
+
+class User(AbstractBaseUser, BaseModel):
     oid              = UUIDField(db_column="oid", unique=True, default=uuid4)
     fullname         = CharField(db_column="fullname", max_length=150, db_index=True)
-    username         = CharField(db_column="username", max_length=50, db_index=True)
+    username         = CharField(db_column="username", unique=True, max_length=50, db_index=True)
     email            = CharField(db_column="email", max_length=50, db_index=True)
     secret_key       = CharField(db_column="secret_key", max_length=255, blank=True)
     password         = CharField(db_column="password", max_length=255)
     password_changed = DateTimeField(db_column="password_changed", null=True, default=None)
     role             = ForeignKey(to=Role, db_column="role_id", on_delete=CASCADE)
+
+    objects = UserManager()
+
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ['email', 'fullname']
 
     def __str__(self) -> str:
         return self.fullname
@@ -99,6 +129,11 @@ class Transaction(BaseModel):
 
     def __str__(self) -> str:
         return self.name
+
+    def save(self, *args, **kwargs) -> None:
+        if isinstance(self.status, Enum):
+            self.status = self.status.value
+        super().save(*args, **kwargs)
 
     class Meta(BaseModel.Meta):
         db_table = "tb_transactions"

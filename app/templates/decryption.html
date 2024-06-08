@@ -1,0 +1,76 @@
+{% extends "bases/app.html" %}
+
+{% block title %}Dekripsi{% endblock title %}
+
+{% block body %}
+  <div class="bg-gray-800 p-4 flex justify-center items-center text-white font-bold mb-10">
+    Decryption
+  </div>
+
+  <div class="container mx-auto p-8 bg-white rounded shadow-md">
+    <div class="bg-white p-8 rounded flex justify-between">
+      <h2 class="text-2xl font-semibold mb-4">Server Data</h2>
+      <div class="flex" x-data="{ keyword: '' }">
+        <input type="text" x-model="keyword" placeholder="Pencarian berdasarkan Kode" class="flex-grow py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-sky-500" />
+        <a x-bind:href="'?search=' + keyword" class="bg-sky-600 text-white py-4 px-4 rounded-r-md hover:bg-sky-600 focus:outline-none focus:bg-sky-600 cursor-pointer">Cari</a>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="min-w-full bg-white">
+        <thead>
+          <tr>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">No.</th>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">User</th>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">File</th>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Kode</th>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-left text-sm leading-4 text-gray-600 uppercase tracking-wider">Tanggal</th>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 text-gray-600 uppercase tracking-wider">Status</th>
+            <th class="py-2 px-4 border-b border-gray-200 bg-gray-100 text-center text-sm leading-4 text-gray-600 uppercase tracking-wider">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if data|length_is:0 %}
+            <tr>
+              <td colspan="7">
+                <div class="text-center opacity-70">
+                  <i class="bx bx-x text-neutral-700 text-9xl"></i>
+                  <p>Data Tidak Ada</p>
+                </div>
+              </td>
+            </tr>
+          {% endif %}
+
+          {% for row in data %}
+            <tr>
+              <td class="py-2 px-4 border-b border-gray-200">{{ forloop.counter0|add:meta.current_page }}.</td>
+              <td class="py-2 px-4 border-b border-gray-200">{{ row.user.fullname }}</td>
+              <td class="py-2 px-4 border-b border-gray-200">{{ row.file.filename }}</td>
+              <td class="py-2 px-4 border-b border-gray-200">{{ row.name }}</td>
+              <td class="py-2 px-4 border-b border-gray-200">{{ row.file.date_created }}</td>
+              <td class="py-2 px-4 border-b border-gray-200">
+                {% if row.status|lower == 'encrypted' %}
+                  <div class="p-2 bg-sky-600 text-white rounded text-center text-sm font-bold">
+                    {{ row.status }}
+                  </div>
+                {% endif %}
+                {% if row.status|lower == 'decrypted' %}
+                  <div class="p-2 bg-amber-500 text-white rounded text-center text-sm font-bold">
+                    {{ row.status }}
+                  </div>
+                {% endif %}
+              </td>
+              <td class="py-2 px-4 border-b border-gray-200">
+                <div class="flex justify-evenly">
+                  <a href="{% url 'download:object' row.file.oid %}"><i class="text-teal-600 bx bx-download text-2xl"></i></a>
+                  {% if row.status|lower == 'encrypted' %}
+                    <a href="{% url 'download:object' row.file.oid %}"><i class="text-red-700 bx bxs-lock-open text-2xl"></i></a>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock body %}
