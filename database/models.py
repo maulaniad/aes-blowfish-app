@@ -9,6 +9,7 @@ from django.db.models import (Model,
                               CharField,
                               DateTimeField,
                               FileField,
+                              BinaryField,
                               ForeignKey,
                               CASCADE)
 
@@ -100,6 +101,7 @@ class File(BaseModel):
     filename   = CharField(db_column="filename", max_length=255, db_index=True)
     extension  = CharField(db_column="extension", max_length=10)
     size       = IntegerField(db_column="size")
+    aes_key    = BinaryField(db_column="aes_key")
     secret_key = CharField(db_column="secret_key", max_length=255, blank=True)
 
     def __str__(self) -> str:
@@ -121,7 +123,7 @@ class File(BaseModel):
 class Transaction(BaseModel):
     oid    = UUIDField(db_column="oid", unique=True, default=uuid4)
     key    = CharField(db_column="key", max_length=255, db_index=True)
-    vector = CharField(db_column="vector", max_length=255)
+    vector = BinaryField(db_column="vector")
     name   = CharField(db_column="name", max_length=255)
     status = CharField(db_column="status", max_length=10, choices=[(status.name, status.value) for status in TransactionStatus])
     user   = ForeignKey(to=User, db_column="user_id", on_delete=CASCADE)
