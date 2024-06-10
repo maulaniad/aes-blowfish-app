@@ -99,14 +99,24 @@
             "Dekripsi File",
             [
               { type: "hidden", name: "oid", label: "OID", value: oid },
-              { type: "text", name: "key", label: "Kunci", placeholder: "Masukkan Kunci Enkripsi" }
+              { type: "text", name: "key", label: "Kunci", placeholder: "Masukkan Kunci Enkripsi", required: true }
             ],
-            () => {
+            (data) => {
+              for (const key in data) {
+                const addedInput = document.createElement('input');
+
+                console.log(key, data[key]);
+                addedInput.name = key;
+                addedInput.type = 'hidden';
+                addedInput.value = data[key];
+                form.appendChild(addedInput);
+              }
+
               form.submit();
             }
           )
         } else {
-          showModal("Konfirmasi", "Jika anda menghapus transaksi ini, maka file tidak dapat dikembalikan atau didekripsi. Apakah Anda yakin?", "confirmation", () => {
+          showModal("Hapus File", "Jika transaksi ini dihapus, maka file tidak dapat dikembalikan atau didekripsi. Yakin ingin menghapus?", "confirmation", () => {
             form.submit();
           })
         }
