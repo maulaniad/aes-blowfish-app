@@ -98,12 +98,12 @@ class DecryptionView(View):
         ).order_by('-date_created')
 
         data, meta = paginate(list_data, page, page_size)
+
         template_context = {
             'data': data,
             'meta': meta,
             'active_search': search
         }
-
         return render(request, template_name="decryption.html", context=template_context)
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
