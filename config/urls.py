@@ -14,7 +14,6 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns: path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
 
 from config.errors import ErrorPageView
@@ -26,7 +25,6 @@ handler404 = "config.errors.not_found"
 handler500 = "config.errors.internal_server_error"
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
     path("errors/", ErrorPageView.as_view(), name="errors"),
     path("errors/<int:code>/", ErrorPageView.as_view(), name="errors"),
 
