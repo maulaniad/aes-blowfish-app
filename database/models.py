@@ -69,7 +69,6 @@ class User(AbstractBaseUser, BaseModel):
     fullname         = CharField(db_column="fullname", max_length=150, db_index=True)
     username         = CharField(db_column="username", unique=True, max_length=50, db_index=True)
     email            = CharField(db_column="email", max_length=50, db_index=True)
-    secret_key       = CharField(db_column="secret_key", max_length=255, blank=True)
     password         = CharField(db_column="password", max_length=255)
     password_changed = DateTimeField(db_column="password_changed", null=True, default=None)
     role             = ForeignKey(to=Role, db_column="role_id", on_delete=CASCADE)
@@ -96,11 +95,12 @@ class User(AbstractBaseUser, BaseModel):
 
 
 class File(BaseModel):
-    oid       = UUIDField(db_column="oid", unique=True, default=uuid4)
-    file      = FileField(db_column="file")
-    filename  = CharField(db_column="filename", max_length=255, db_index=True)
-    extension = CharField(db_column="extension", max_length=10)
-    size      = IntegerField(db_column="size")
+    oid        = UUIDField(db_column="oid", unique=True, default=uuid4)
+    file       = FileField(db_column="file")
+    filename   = CharField(db_column="filename", max_length=255, db_index=True)
+    extension  = CharField(db_column="extension", max_length=10)
+    size       = IntegerField(db_column="size")
+    secret_key = CharField(db_column="secret_key", max_length=255, blank=True)
 
     def __str__(self) -> str:
         return self.filename
