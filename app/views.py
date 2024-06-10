@@ -1,6 +1,7 @@
 from django.contrib import messages
+from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.views import View
 
 from database.models import File, Transaction
@@ -39,7 +40,8 @@ class EncryptionView(View):
             file=file,
             filename=file.name,
             extension=file.name.split(".")[-1],
-            size=file.size
+            size=file.size,
+            secret_key=make_password(key)
         )
 
         file_checksum = compute_checksum(new_file.file.path)
@@ -84,7 +86,48 @@ class DecryptionView(View):
         data, meta = paginate(list_data, page, page_size)
         template_context = {
             'data': data,
-            'meta': meta
+            'meta': meta,
+            'active_search': search
         }
 
         return render(request, template_name="decryption.html", context=template_context)
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        operation = kwargs['operation']
+        object_id = request.POST.get('oid', None)
+
+        if not object_id:
+            messages.error(request, message="Transaksi atau File tidak ada ...")
+            return redirect(to="app:decryption")
+
+        if operation == "decrypt":
+            return self._decrypt(request, object_id)
+
+        return self._delete(request, object_id)
+
+    def _decrypt(self, request: HttpRequest, object_id: str) -> HttpResponse:
+        try:
+            transaction = Transaction.objects.get(oid=object_id)
+        except Transaction.DoesNotExist:
+            messages.error(request, message="Transaksi atau File tidak ada ...")
+            return redirect(to="app:decryption")
+
+        # transaction.status = TransactionStatus.DECRYPTED.value
+        # transaction.save()
+
+        return redirect(to="app:decryption")
+
+    def _delete(self, request: HttpRequest, object_id: str) -> HttpResponse:
+        try:
+            transaction = Transaction.objects.get(oid=object_id)
+        except Transaction.DoesNotExist:
+            messages.error(request, message="Transaksi atau File tidak ada ...")
+            return redirect(to="app:decryption")
+
+        transaction.file.date_deleted = dt_now()
+        transaction.file.save()
+        transaction.date_deleted = dt_now()
+        transaction.save()
+
+        messages.success(request, message="File berhasil dihapus ...")
+        return redirect(to="app:decryption")

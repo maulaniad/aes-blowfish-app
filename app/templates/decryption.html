@@ -7,10 +7,12 @@
     Decryption
   </div>
 
+  {% include "components/modal_form.html" %}
+
   <div class="container mx-auto p-8 bg-white rounded shadow-md">
     <div class="bg-white p-8 rounded flex justify-between">
       <h2 class="text-2xl font-semibold mb-4">Server Data</h2>
-      <div class="flex" x-data="{ keyword: '' }">
+      <div class="flex" x-data="{ keyword: '{{ active_search }}' }">
         <input type="text" x-model="keyword" placeholder="Pencarian berdasarkan Kode" class="flex-grow py-2 px-4 border border-gray-300 rounded-l-md focus:outline-none focus:border-sky-500" />
         <a x-bind:href="'?search=' + keyword" class="bg-sky-600 text-white py-4 px-4 rounded-r-md hover:bg-sky-600 focus:outline-none focus:bg-sky-600 cursor-pointer">Cari</a>
       </div>
@@ -63,7 +65,16 @@
                 <div class="flex justify-evenly">
                   <a href="{% url 'download:object' row.file.oid %}"><i class="text-teal-600 bx bx-download text-2xl"></i></a>
                   {% if row.status|lower == 'encrypted' %}
-                    <a href="{% url 'download:object' row.file.oid %}"><i class="text-red-700 bx bxs-lock-open text-2xl"></i></a>
+                    <form class="decryption-form" data-action="decrypt" action="{% url 'app:decryption' 'decrypt' %}" method="post">
+                      <input type="hidden" name="oid" value="{{ row.oid }}">
+                      <button type="submit"><i class="text-amber-500 bx bxs-lock-open text-2xl"></i></button>
+                      {% csrf_token %}
+                    </form>
+                    <form class="decryption-form" data-action="delete" action="{% url 'app:decryption' 'delete' %}" method="post">
+                      <input type="hidden" name="oid" value="{{ row.oid }}">
+                      <button type="submit"><i class="text-red-700 bx bxs-trash text-2xl"></i></button>
+                      {% csrf_token %}
+                    </form>
                   {% endif %}
                 </div>
               </td>
@@ -74,3 +85,32 @@
     </div>
   </div>
 {% endblock body %}
+
+{% block script %}
+  <script>
+    document.querySelectorAll('.decryption-form').forEach(form => {
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const oid = form.querySelector('input').value;
+        const action = form.getAttribute('data-action');
+
+        if (action == 'decrypt') {
+          showModalForm(
+            "Dekripsi File",
+            [
+              { type: "hidden", name: "oid", label: "OID", value: oid },
+              { type: "text", name: "key", label: "Kunci", placeholder: "Masukkan Kunci Enkripsi" }
+            ],
+            () => {
+              form.submit();
+            }
+          )
+        } else {
+          showModal("Konfirmasi", "Jika anda menghapus transaksi ini, maka file tidak dapat dikembalikan atau didekripsi. Apakah Anda yakin?", "confirmation", () => {
+            form.submit();
+          })
+        }
+      })
+    })
+  </script>
+{% endblock script %}
