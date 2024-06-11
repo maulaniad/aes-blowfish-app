@@ -28,15 +28,16 @@ ICONS = {
 
 
 COLORS = {
-    RecentActivityType.ENCRYPTION: "text-sky-500",
+    RecentActivityType.ENCRYPTION: "text-blue-600",
     RecentActivityType.DECRYPTION: "text-orange-500",
-    RecentActivityType.FILE_DELETE: "text-red-500",
-    RecentActivityType.ACCOUNT_UPDATE: "text-blue-500"
+    RecentActivityType.FILE_DELETE: "text-red-700",
+    RecentActivityType.ACCOUNT_UPDATE: "text-sky-600"
 }
 
 
 class RecentActivityDict(TypedDict):
     action: str
     box_icon: str
+    tw_color: str
     user: str
     time_difference: str

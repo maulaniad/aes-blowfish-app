@@ -12,7 +12,7 @@ from core.aes128 import AES
 from database.models import RecentActivity
 from helpers.dates import dt_now
 from helpers.enums import RecentActivityType
-from helpers.types import ICONS, RecentActivityDict
+from helpers.types import ICONS, COLORS, RecentActivityDict
 
 
 def open_file(file: File | str, size: int | None = None) -> bytes:
@@ -123,6 +123,7 @@ def get_recent_activities(length: int) -> list[RecentActivityDict]:
         results.append({
             'action': recent_activity.action,
             'box_icon': recent_activity.box_icon,
+            'tw_color': recent_activity.tw_color,
             'user': recent_activity.user.fullname,
             'time_difference': format_time_difference(recent_activity.issued),
         })
@@ -134,6 +135,7 @@ def create_recent_activity(request: HttpRequest, type: RecentActivityType, times
     RecentActivity.objects.create(
         action=type.value,
         box_icon=ICONS[type],
+        tw_color=COLORS[type],
         issued=timestamp,
         user=request.user
     )
