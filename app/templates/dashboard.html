@@ -67,10 +67,14 @@
 
         {% for activity in recent_activities %}
           <div class="flex items-center mb-2">
-            <i class="{{ activity.box_icon }} text-orange-500 text-xl mr-2"></i>
+            <i class="{{ activity.box_icon }} {{ activity.tw_color }} text-xl mr-2"></i>
             <div>
               <p class="text-gray-700 text-sm">{{ activity.action }}</p>
-              <p class="text-gray-500 text-xs">{{ activity.time_difference }}</p>
+              <p class="text-gray-500 text-xs">{{ activity.user }}</p>
+              <div class="flex justify-between items-center">
+                <p class="text-gray-500 text-xs">{{ activity.time_difference }}</p>
+                <i class="bx bxs-watch text-gray-500 text-sm mx-1"></i>
+              </div>
             </div>
           </div>
         {% endfor %}
