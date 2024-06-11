@@ -1,13 +1,18 @@
 import os
 import string
 import random
+from datetime import datetime, timedelta
 from typing import Any
 
 from django.core.files.base import ContentFile, File
 from django.core.paginator import Paginator, Page
+from django.http import HttpRequest
 
 from core.aes128 import AES
+from database.models import RecentActivity
 from helpers.dates import dt_now
+from helpers.enums import RecentActivityType
+from helpers.types import ICONS, RecentActivityDict
 
 
 def open_file(file: File | str, size: int | None = None) -> bytes:
@@ -61,6 +66,25 @@ def format_size(size_in_bytes: int) -> str:
     return f"{size:.2f} {units[unit_index]}"
 
 
+def format_time_difference(timestamp: datetime) -> str:
+    now = datetime.now()
+    time_diff = now - timestamp
+
+    if time_diff < timedelta(minutes=5):
+        return "Baru saja"
+    elif time_diff < timedelta(hours=1):
+        minutes = time_diff.seconds // 60
+        return f"{minutes} menit yang lalu"
+    elif time_diff < timedelta(days=1):
+        hours = time_diff.seconds // 3600
+        return f"{hours} jam yang lalu"
+    elif time_diff < timedelta(days=2):
+        hours = time_diff.seconds // 3600
+        return f"Kemarin {hours} jam yang lalu"
+    days = time_diff.days
+    return f"{days} hari yang lalu"
+
+
 def paginate(data: Any, page: int = 1, page_size: int = 10) -> tuple[Page, dict[str, Any]]:
     paginator = Paginator(data, page_size)
     page_obj = paginator.get_page(page)
@@ -89,3 +113,27 @@ def decrypt_file(file: File | str, key: bytes, initial_vector: bytes):
 
     plaintext = aes.decrypt_cbc(ciphertext, initial_vector)
     return plaintext
+
+
+def get_recent_activities(length: int) -> list[RecentActivityDict]:
+    results = []
+    recent_activities = tuple(RecentActivity.objects.all().order_by('-issued')[:length])
+
+    for recent_activity in recent_activities:
+        results.append({
+            'action': recent_activity.action,
+            'box_icon': recent_activity.box_icon,
+            'user': recent_activity.user.fullname,
+            'time_difference': format_time_difference(recent_activity.issued),
+        })
+
+    return results
+
+
+def create_recent_activity(request: HttpRequest, type: RecentActivityType, timestamp: datetime = dt_now()):
+    RecentActivity.objects.create(
+        action=type.value,
+        box_icon=ICONS[type],
+        issued=timestamp,
+        user=request.user
+    )
