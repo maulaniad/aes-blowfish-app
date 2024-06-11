@@ -14,7 +14,7 @@
           <i class="bx bxs-data text-pink-800 text-4xl opacity-60"></i>
           <div class="ml-2">
             <h2 class="text-gray-700 text-lg font-semibold mb-2">File di Server</h2>
-            <p class="text-gray-500 text-2xl font-bold">10</p>
+            <p class="text-gray-500 text-2xl font-bold">{{ server_files_count }}</p>
           </div>
         </div>
       </div>
@@ -23,7 +23,7 @@
           <i class="bx bx-lock text-orange-800 text-4xl opacity-60"></i>
           <div class="ml-2">
             <h2 class="text-gray-700 text-lg font-semibold mb-2">File Terenkripsi</h2>
-            <p class="text-gray-500 text-2xl font-bold">5</p>
+            <p class="text-gray-500 text-2xl font-bold">{{ encrypted_count }}</p>
           </div>
         </div>
       </div>
@@ -32,7 +32,7 @@
           <i class="bx bx-lock-open text-orange-800 text-4xl opacity-60"></i>
           <div class="ml-2">
             <h2 class="text-gray-700 text-lg font-semibold mb-2">File Terdekripsi</h2>
-            <p class="text-gray-500 text-2xl font-bold">5</p>
+            <p class="text-gray-500 text-2xl font-bold">{{ decrypted_count }}</p>
           </div>
         </div>
       </div>
@@ -41,7 +41,7 @@
           <i class="bx bxs-folder-open text-yellow-800 text-4xl opacity-60"></i>
           <div class="ml-2">
             <h2 class="text-gray-700 text-lg font-semibold mb-2">File Total</h2>
-            <p class="text-gray-500 text-2xl font-bold">15</p>
+            <p class="text-gray-500 text-2xl font-bold">{{ total_files_count }}</p>
           </div>
         </div>
       </div>
@@ -50,51 +50,30 @@
           <i class="bx bxs-user text-green-800 text-4xl opacity-60"></i>
           <div class="ml-2">
             <h2 class="text-gray-700 text-lg font-semibold mb-2">Akun Pengguna</h2>
-            <p class="text-gray-500 text-2xl font-bold">15</p>
+            <p class="text-gray-500 text-2xl font-bold">{{ users_count }}</p>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="w-60 min-h-60 p-2 rounded shadow">
+      <h2 class="text-gray-700 text-lg text-center font-semibold mb-2">Aktivitas Terbaru</h2>
+      <div class="p-4 bg-gray-100 rounded flex flex-col">
+        {% if recent_activities|length == 0 %}
+          <i class="bx bx-ghost text-center text-4xl text-gray-500"></i>
+          <div class="my-2"></div>
+          <p class="text-gray-500 text-sm text-center">Belum ada aktivitas</p>
+        {% endif %}
 
-    <div class="w-60 p-2 rounded shadow">
-      <h2 class="text-gray-700 text-lg font-semibold mb-2">Aktivitas Terbaru</h2>
-      <div class="p-4 bg-gray-100 rounded">
-        <div class="flex items-center mb-2">
-          <i class="bx bx-lock-open text-orange-500 text-xl mr-2"></i>
-          <div>
-            <p class="text-gray-700 text-sm">File didekripsi</p>
-            <p class="text-gray-500 text-xs">2 jam yang lalu</p>
+        {% for activity in recent_activities %}
+          <div class="flex items-center mb-2">
+            <i class="{{ activity.box_icon }} text-orange-500 text-xl mr-2"></i>
+            <div>
+              <p class="text-gray-700 text-sm">{{ activity.action }}</p>
+              <p class="text-gray-500 text-xs">{{ activity.time_difference }}</p>
+            </div>
           </div>
-        </div>
-        <div class="flex items-center mb-2">
-          <i class="bx bx-lock-open text-orange-500 text-xl mr-2"></i>
-          <div>
-            <p class="text-gray-700 text-sm">File dienkripsi</p>
-            <p class="text-gray-500 text-xs">3 jam yang lalu</p>
-          </div>
-        </div>
-        <div class="flex items-center">
-          <i class="bx bxs-user text-blue-500 text-xl mr-2"></i>
-          <div>
-            <p class="text-gray-700 text-sm">Akun diupdate</p>
-            <p class="text-gray-500 text-xs">4 jam yang lalu</p>
-          </div>
-        </div>
-        <div class="flex items-center">
-          <i class="bx bxs-user text-blue-500 text-xl mr-2"></i>
-          <div>
-            <p class="text-gray-700 text-sm">Akun diupdate</p>
-            <p class="text-gray-500 text-xs">4 jam yang lalu</p>
-          </div>
-        </div>
-        <div class="flex items-center">
-          <i class="bx bxs-user text-blue-500 text-xl mr-2"></i>
-          <div>
-            <p class="text-gray-700 text-sm">Akun diupdate</p>
-            <p class="text-gray-500 text-xs">4 jam yang lalu</p>
-          </div>
-        </div>
+        {% endfor %}
       </div>
     </div>
   </div>

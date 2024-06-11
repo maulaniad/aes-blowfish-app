@@ -1,30 +1,53 @@
+from os import listdir
 from time import time
 
+from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.views import View
 
-from database.models import File, Transaction
+from database.models import File, Transaction, User
 from core.blowfish import Blowfish
 from core.checksum import compute_checksum
 from helpers.dates import dt_now
-from helpers.enums import TransactionStatus
-from helpers.functions import (write_bytes_to_file,
+from helpers.enums import RecentActivityType, TransactionStatus
+from helpers.functions import (create_recent_activity,
+                               encrypt_file,
+                               decrypt_file,
+                               format_size,
                                generate_random_chars,
                                generate_search_code,
-                               format_size,
+                               get_recent_activities,
                                paginate,
-                               encrypt_file,
-                               decrypt_file)
+                               write_bytes_to_file)
 from helpers.types import ARCHIVES
 
 # Create your views here.
 
 class DashboardView(View):
     def get(self, request: HttpRequest) -> HttpResponse:
-        return render(request, template_name="dashboard.html")
+        users_count = User.objects.filter(date_deleted__gt=dt_now()).count()
+
+        transactions = Transaction.objects.filter(date_deleted__gt=dt_now())
+        encrypted_count = transactions.filter(status=TransactionStatus.ENCRYPTED.value).count()
+        decrypted_count = transactions.filter(status=TransactionStatus.DECRYPTED.value).count()
+
+        files = listdir(settings.MEDIA_ROOT)
+        files_count = len(files)
+
+        recent_activities = get_recent_activities(length=6)
+
+        template_context = {
+            'users_count': users_count,
+            'encrypted_count': encrypted_count,
+            'decrypted_count': decrypted_count,
+            'total_files_count': encrypted_count + decrypted_count,
+            'server_files_count': files_count,
+            'recent_activities': recent_activities
+        }
+        return render(request, template_name="dashboard.html", context=template_context)
 
 
 class EncryptionView(View):
@@ -72,6 +95,8 @@ class EncryptionView(View):
             file=new_file
         )
 
+        create_recent_activity(request, type=RecentActivityType.ENCRYPTION)
+
         template_context = {
             'elapsed_time': round(end_time - start_time, 2),
             'checksum': file_checksum,
@@ -116,8 +141,10 @@ class DecryptionView(View):
             return redirect(to="app:decryption")
 
         if operation == "decrypt":
+            create_recent_activity(request, type=RecentActivityType.DECRYPTION)
             return self._decrypt(request, object_id, secret_key)
 
+        create_recent_activity(request, type=RecentActivityType.FILE_DELETE)
         return self._delete(request, object_id)
 
     def _decrypt(self, request: HttpRequest, object_id: str, secret_key: str | None) -> HttpResponse:
