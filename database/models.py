@@ -15,6 +15,7 @@ from django.db.models import (Model,
 
 from helpers.dates import dt_end_date, dt_now
 from helpers.enums import TransactionStatus
+from helpers.types import ICONS, COLORS
 
 # Create your models here.
 
@@ -125,7 +126,7 @@ class Transaction(BaseModel):
     key    = CharField(db_column="key", max_length=255, db_index=True)
     vector = BinaryField(db_column="vector")
     name   = CharField(db_column="name", max_length=255)
-    status = CharField(db_column="status", max_length=10, choices=[(status.name, status.value) for status in TransactionStatus])
+    status = CharField(db_column="status", max_length=10, choices=[(s.name, s.value) for s in TransactionStatus])
     user   = ForeignKey(to=User, db_column="user_id", on_delete=CASCADE)
     file   = ForeignKey(to=File, db_column="file_id", on_delete=CASCADE)
 
@@ -142,10 +143,12 @@ class Transaction(BaseModel):
 
 
 class RecentActivity(BaseModel):
-    oid    = UUIDField(db_column="oid", unique=True, default=uuid4)
-    action = CharField(db_column="action", max_length=255, db_index=True)
-    issued = DateTimeField(db_column="issued", auto_now_add=True)
-    user   = ForeignKey(to=User, db_column="user_id", on_delete=CASCADE)
+    oid      = UUIDField(db_column="oid", unique=True, default=uuid4)
+    action   = CharField(db_column="action", max_length=255, db_index=True)
+    box_icon = CharField(db_column="box_icon", max_length=255, choices=[(k.name, v) for k, v in ICONS.items()])
+    tw_color = CharField(db_column="tw_color", max_length=255, choices=[(k.name, v) for k, v in COLORS.items()])
+    issued   = DateTimeField(db_column="issued", auto_now_add=True)
+    user     = ForeignKey(to=User, db_column="user_id", on_delete=CASCADE)
 
     def __str__(self) -> str:
         return self.action
