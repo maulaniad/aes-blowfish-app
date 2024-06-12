@@ -29,6 +29,12 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
+SESSION_COOKIE_SECURE = False if DEBUG else True
+
+CSRF_COOKIE_SECURE = False if DEBUG else True
+
+SECURE_SSL_REDIRECT = False if DEBUG else True
+
 
 # Application definition
 
@@ -79,6 +85,7 @@ TEMPLATES = [
             join(BASE_DIR, 'templates'),
             join(BASE_DIR, 'app', 'templates'),
             join(BASE_DIR, 'authentication', 'templates'),
+            join(BASE_DIR, 'rbac', 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
