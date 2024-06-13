@@ -160,11 +160,11 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
-STATIC_ROOT = 'static/'
+STATIC_ROOT = join(BASE_DIR, 'static')
 
-MEDIA_ROOT = 'uploads/'
+MEDIA_ROOT = join(BASE_DIR, 'uploads')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
