@@ -1,6 +1,7 @@
 from django.http import (HttpRequest,
                          HttpResponse,
                          HttpResponseRedirect)
+from django.middleware.security import SecurityMiddleware
 from django.urls import reverse
 
 # Create your custom middlewares here.
@@ -35,3 +36,10 @@ class AuthenticationMiddleware:
             return True
 
         return path in [reverse(route) for route in SAFE_ROUTES]
+
+
+class CustomSecurityMiddleware(SecurityMiddleware):
+    def process_response(self, request, response):
+        response['Cross-Origin-Opener-Policy'] = 'same-origin'
+        response['Cross-Origin-Embedder-Policy'] = 'require-corp'
+        return response
