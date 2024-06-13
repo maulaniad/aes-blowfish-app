@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import (HttpRequest,
                          HttpResponse,
                          HttpResponseRedirect)
@@ -33,6 +34,9 @@ class AuthenticationMiddleware:
 
     def is_safe_route(self, path: str) -> bool:
         if path == "/":
+            return True
+
+        if path in (settings.MEDIA_ROOT, settings.STATIC_ROOT):
             return True
 
         return path in [reverse(route) for route in SAFE_ROUTES]
