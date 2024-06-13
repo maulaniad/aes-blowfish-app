@@ -30,11 +30,12 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 SESSION_COOKIE_SECURE = False if DEBUG else True
-
 CSRF_COOKIE_SECURE = False if DEBUG else True
-
 SECURE_SSL_REDIRECT = False if DEBUG else True
 
+CORS_ALLOWED_ORIGINS = config('CORS_ALLOWED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_ALL_ORIGINS = True if DEBUG else False
 
 # Application definition
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third-party libraries
+    'corsheaders',
     'compressor',  # django-compressor
 
     # Project Apps
@@ -57,6 +59,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    # Third-party middlewares
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

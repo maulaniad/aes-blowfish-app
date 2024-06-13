@@ -3,7 +3,10 @@ bcrypt==4.1.2
 Django==5.0.3
 django-appconf==1.0.6
 django-compressor==4.4
+django-cors-headers==4.3.1
+gunicorn==22.0.0
 mysqlclient==2.2.4
+packaging==24.1
 python-decouple==3.8
 rcssmin==1.1.1
 rjsmin==1.2.1
