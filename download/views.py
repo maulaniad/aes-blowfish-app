@@ -19,7 +19,7 @@ class ObjectDownloadView(View):
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
         filepath = join(settings.MEDIA_ROOT, file_data.file.name)
-        print(filepath)
+
         if not exists(filepath):
             messages.error(request, message="File tidak ditemukan ...")
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
