@@ -16,7 +16,9 @@ class Command(BaseCommand):
         models.File.objects.all().delete()
         models.RecentActivity.objects.all().delete()
         models.User.objects.all().delete()
+        models.RBAC.objects.all().delete()
         models.Role.objects.all().delete()
+        models.Permission.objects.all().delete()
 
         for filename in listdir(settings.MEDIA_ROOT):
             filepath = join(settings.MEDIA_ROOT, filename)
