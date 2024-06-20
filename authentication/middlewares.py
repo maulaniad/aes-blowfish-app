@@ -21,6 +21,12 @@ class AuthenticationMiddleware:
 
         is_authenticated = request.session.get('is_authenticated', None)
 
+        if request.path.split("/")[1] == "static":
+            return response
+
+        if request.path.startswith(settings.MEDIA_ROOT) and is_authenticated:
+            return response
+
         if request.path == "/" and not is_authenticated:
             return HttpResponseRedirect(redirect_to=reverse("authentication:login"))
 
@@ -36,14 +42,4 @@ class AuthenticationMiddleware:
         if path == "/":
             return True
 
-        if path in (settings.MEDIA_ROOT, settings.STATIC_ROOT):
-            return True
-
         return path in [reverse(route) for route in SAFE_ROUTES]
-
-
-class CustomSecurityMiddleware(SecurityMiddleware):
-    def process_response(self, request, response):
-        response['Cross-Origin-Opener-Policy'] = 'same-origin'
-        response['Cross-Origin-Embedder-Policy'] = 'require-corp'
-        return response

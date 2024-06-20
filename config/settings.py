@@ -71,7 +71,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # Custom Middlewares
-    'authentication.middlewares.CustomSecurityMiddleware',
     'authentication.middlewares.AuthenticationMiddleware',
 ]
 
