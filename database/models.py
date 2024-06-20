@@ -144,9 +144,9 @@ class Transaction(BaseModel):
 
 class RecentActivity(BaseModel):
     oid      = UUIDField(db_column="oid", unique=True, default=uuid4)
-    action   = CharField(db_column="action", max_length=255, db_index=True)
-    box_icon = CharField(db_column="box_icon", max_length=255, choices=[(k.name, v) for k, v in ICONS.items()])
-    tw_color = CharField(db_column="tw_color", max_length=255, choices=[(k.name, v) for k, v in COLORS.items()])
+    action   = CharField(db_column="action", max_length=50, db_index=True)
+    box_icon = CharField(db_column="box_icon", max_length=50, choices=[(k.name, v) for k, v in ICONS.items()])
+    tw_color = CharField(db_column="tw_color", max_length=50, choices=[(k.name, v) for k, v in COLORS.items()])
     issued   = DateTimeField(db_column="issued", auto_now_add=True)
     user     = ForeignKey(to=User, db_column="user_id", on_delete=CASCADE)
 
@@ -155,3 +155,24 @@ class RecentActivity(BaseModel):
 
     class Meta(BaseModel.Meta):
         db_table = "tb_recent_activities"
+
+
+class Permission(BaseModel):
+    oid             = UUIDField(db_column="oid", unique=True, default=uuid4)
+    permission_name = CharField(db_column="permission_name", max_length=50, db_index=True)
+    module_name     = CharField(db_column="module_name", max_length=50, db_index=True)
+
+    def __str__(self) -> str:
+        return self.permission_name
+
+    class Meta(BaseModel.Meta):
+        db_table = "tb_permissions"
+
+
+class RBAC(BaseModel):
+    oid        = UUIDField(db_column="oid", unique=True, default=uuid4)
+    permission = ForeignKey(to=Permission, db_column="permission_id", on_delete=CASCADE)
+    role       = ForeignKey(to=Role, db_column="role_id", on_delete=CASCADE)
+
+    class Meta(BaseModel.Meta):
+        db_table = "tb_rbac"
