@@ -33,7 +33,7 @@ def open_file(file: File | str, size: int | None = None) -> bytes:
         return f.read()
 
 
-def write_bytes_to_file(data: bytes, file_path: str):
+def write_bytes_to_file(data: bytes, file_path: str) -> ContentFile:
     with open(file_path, 'wb') as f:
         f.write(data)
 
@@ -106,7 +106,7 @@ def encrypt_file(file: File | str, key: bytes, initial_vector: bytes) -> bytes:
     return ciphertext
 
 
-def decrypt_file(file: File | str, key: bytes, initial_vector: bytes):
+def decrypt_file(file: File | str, key: bytes, initial_vector: bytes) -> bytes:
     ciphertext = open_file(file)
 
     aes = AES(key)
