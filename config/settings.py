@@ -32,9 +32,9 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.spl
 SESSION_COOKIE_SECURE = False if DEBUG else True
 
 CSRF_COOKIE_SECURE = False if DEBUG else True
-CSRF_TRUSTED_ORIGINS = [
-    'https://*.127.0.0.1', 'https://*.localhost'
-] if DEBUG else config('CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
+
+CSRF_LIST_ENTRIES = config('CSRF_TRUSTED_ORIGINS', cast=lambda v: [s.strip() for s in v.split(',')])
+CSRF_TRUSTED_ORIGINS = ['https://*.127.0.0.1', 'https://*.localhost', *CSRF_LIST_ENTRIES] if DEBUG else CSRF_LIST_ENTRIES  # type: ignore
 
 SECURE_SSL_REDIRECT = False if DEBUG else True
 
