@@ -12,7 +12,9 @@ def start_tailwind():
         cmd = [f"./{executable}", "-i", "static/src/input.css", "-o", "static/src/output.css", "--watch"]
         subprocess.run(cmd)
     except FileNotFoundError:
-        print("Tailwind CSS (Standalone) execeutable not found")
+        print()
+        print("FATAL ERROR !")
+        print("Tailwind CSS (Standalone binary) executable not found")
         print("You can download it from : https://github.com/tailwindlabs/tailwindcss/releases")
         print("After Download, put the executable file in the same folder as this script")
         print(f"Rename it to {executable}")
